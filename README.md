@@ -109,3 +109,6 @@ Développé par toi-même avec passion ❤️ et un peu d’IA (Génération du 
 
 ## 🏭URL de production
 
+Pas fait.
+
+Vidéo de démonstration dans le dossier principal.
