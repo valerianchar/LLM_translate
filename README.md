@@ -1,75 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌍 Application de Traduction IA (Laravel + Sail + Mistral + Vue.js)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Cette application permet de traduire du texte en plusieurs langues à l’aide d’un script Python connecté à l’API de Mistral. Elle est construite avec Laravel en API, Vue 3 côté frontend et Docker via Laravel Sail.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fonctionnalités
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Traduction automatique d’un texte vers une langue cible.
+- Utilisation de **Mistral API** (LLM) pour générer plusieurs traductions possibles.
+- Résultats affichés sous forme de **liste** dans une interface moderne Vue 3.
+- Communication Laravel ↔ Python via `Symfony Process`.
+- Conteneur Docker Laravel Sail prêt à l’emploi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧾 Prérequis
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [Docker](https://www.docker.com/) installé sur ta machine.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🐳 Lancer l'application avec Sail
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Installer les dépendances PHP et JS
 
-### Premium Partners
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install && ./vendor/bin/sail npm run dev
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 2. Générer la clé d'application Laravel
 
-## Contributing
+```bash
+./vendor/bin/sail artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Démarrer le serveur en développement
 
-## Code of Conduct
+```bash
+./vendor/bin/sail up
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Frontend (Vue.js) compilé via Vite : http://localhost
+- API Laravel : http://localhost/api/translate
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 💡 Comment ça marche ?
 
-## License
+- L’utilisateur saisit un texte dans le frontend Vue 3.
+- Il sélectionne une langue cible.
+- Un appel est fait vers `/api/translate`.
+- Laravel appelle un **script Python** avec les arguments (texte + langue).
+- Le script utilise **MistralClient** pour générer plusieurs traductions.
+- Le JSON renvoyé contient une **liste de traductions**.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
 
+## 🐍 Script Python
 
+Situé dans `scripts/translate.py`, il utilise la lib `mistralai` :
 
+```bash
+python3 scripts/translate.py "Bonjour" "en"
+```
 
-Rajouter les techno 
-ia utiliser
-expliquer un peut
-# LLM_translate
-# LLM_translate
+---
+
+## 📦 Stack technique
+
+- **Laravel** 11 (API only)
+- **Vue 3 + Composition API**
+- **Inertia.js**
+- **Tailwind CSS**
+- **Python 3.12**
+- **Mistral AI**
+- **Docker + Sail**
+
+---
+
+## 📌 Astuce utile
+
+Pour exécuter un script dans le conteneur :
+
+```bash
+./vendor/bin/sail shell
+python3 scripts/translate.py "test" "en"
+```
+
+---
+
+## 🤖 Auteur
+
+Développé par toi-même avec passion ❤️ et un peu d’IA (Génération du README par CHATGPT).
+
+---
+
+## 🛟 Ressources utiles
+
+- [Laravel Sail](https://laravel.com/docs/sail)
+- [Mistral API](https://docs.mistral.ai/)
+- [Vue 3 Documentation](https://vuejs.org/guide/introduction.html)
+
+--- 
+
+## 🏭URL de production
+

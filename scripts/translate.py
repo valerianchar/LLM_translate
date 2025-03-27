@@ -22,16 +22,18 @@ target_language = sys.argv[2]
 # Message à envoyer au modèle
 messages = [
     {
-        "role":"system", "content":"Tu es un traducteur de texte professionnel. je veux que tu me fasse une liste de traduction"
+        "role": "system",
+        "content": "Tu es un traducteur professionnel. Réponds uniquement avec une liste de traductions possibles, sans phrase complète ni explication. Une ligne par traduction."
     },
     {
-        "role":"user", "content":f"Traduis le texte suivant en {target_language} : '{text}'"
+        "role": "user",
+        "content": f"Traduis le texte suivant en {target_language} : {text}"
     }
 ]
 
+
 try:
-    # ➡️ Demander 3 suggestions au modèle
-    response = client.chat.complete(model="mistral-medium", messages=messages, n=3)
+    response = client.chat.complete(model="mistral-medium", messages=messages)
 
     # Récupération de toutes les suggestions
     suggestions = [choice.message.content for choice in response.choices]
